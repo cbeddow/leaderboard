@@ -57,6 +57,7 @@ $(document).ready( function() {
   console.log(userjson);
   var array = [];
   var array2 = [];
+  var iscores = [];
   $.ajax({
           type: "get",
           dataType: "json",
@@ -80,17 +81,13 @@ $(document).ready( function() {
                   return len;
                 }
                 });
-        $('#indiv').append('<tr><td>' + user + '</td><td>' + len + '</td><td>' + team + '</td></tr>');
-
-        array2.push({team, len});
+                iscores.push({user, len, team});
 
 
-    }
-
-  //
-
-  }
-  });
+                array2.push({team, len});
+              }
+           }
+        });
   teams = array.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
   let objArr = array2
   let counts = objArr.reduce((prev, curr) => {
@@ -102,12 +99,22 @@ $(document).ready( function() {
   return {team, len}
   })
   console.log(JSON.stringify(scores));
-
+  scores.sort(function(a,b){
+    return b.len - a.len;
+    }
+  );
+  iscores.sort(function(a,b){
+    return b.len - a.len;
+    }
+  );
   for (x = 0; x < scores.length; x++) {
-    $('#teams').append('<tr><td>' + scores[x].team + '</td><td>' + scores[x].len + '</td></tr>');
+    $('#teams').append('<tr><td>' + (x+1) + '</td><td>' + scores[x].team + '</td><td>' + scores[x].len + '</td></tr>');
+  };
+  for (x = 0; x < iscores.length; x++) {
+    $('#indiv').append('<tr><td>' + (x+1) + '</td><td>' + iscores[x].user + '</td><td>' + iscores[x].len + '</td><td>' + iscores[x].team + '</td></tr>');
   };
 
-  });
+});
 
 
 
@@ -131,7 +138,7 @@ $(document).ready( function() {
   <div class="row">
     <div class="col-sm-6">
       <table id="indiv" class="table">
-        <tr id="header"><td>username</td><td>photos</td><td>team</td></tr>
+        <tr id="header"><td>rank</td><td>username</td><td>photos</td><td>team</td></tr>
       </table>
     </div>
 
@@ -139,9 +146,9 @@ $(document).ready( function() {
     </div>
     <div class="col-sm-4">
       <table id="teams" class="table">
-    <tr id="header"><td>team</td><td>total photos</td></tr>
+    <tr id="header"><td>rank</td><td>team</td><td>total photos</td></tr>
 
-      </table>
+  </table>
     </div>
     <div class="col-sm-1">
     </div>
